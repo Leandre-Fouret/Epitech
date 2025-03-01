@@ -1,0 +1,7 @@
+my_sudo
+*.o
+*~
+.vscode/
+html
+latex
+doc_sudo

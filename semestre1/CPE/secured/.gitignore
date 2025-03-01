@@ -1,0 +1,16 @@
+*.o
+libmy.a
+secured
+test
+include
+lib
+insertion.c
+main.c
+Makefile
+generator.py
+test.c
+libhashtable.a
+.vscode
+html
+latex
+Doxyfile

@@ -1,0 +1,9 @@
+*~
+*#*#
+vgcore*
+*log
+*.o
+my_radar
+a.out
+test*
+gen.py

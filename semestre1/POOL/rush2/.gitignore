@@ -1,0 +1,10 @@
+libmy.a
+mr_clean.sh
+*.out
+#*#
+*~
+unit_test*
+rush2
+info_params.c
+mr_clean.sh
+*.gc*

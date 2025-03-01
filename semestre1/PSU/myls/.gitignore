@@ -1,0 +1,7 @@
+a.out
+vgcore*
+*.log
+.vscode
+*.json
+libmy.a
+my_ls

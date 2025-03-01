@@ -1,0 +1,11 @@
+minish_doc
+*.o
+mysh
+a.out
+test.c
+latex
+html
+test
+sigsegv.c
+crash
+crash.c

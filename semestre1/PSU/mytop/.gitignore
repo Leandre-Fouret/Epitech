@@ -1,0 +1,7 @@
+.vscode
+*.o
+my_top
+a.out
+val
+vgcore*
+test
