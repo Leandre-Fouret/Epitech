@@ -1,0 +1,5 @@
+minish2.code-workspace
+*.o
+a.out
+segv.c
+test

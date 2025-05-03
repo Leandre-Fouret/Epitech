@@ -1,0 +1,11 @@
+a.out
+amazed
+*.o
+*.a
+vgcore*
+laby_gen.pl
+input
+B-CPE-200_Amazed_binaries
+libmy.a
+.vscode
+input(2)

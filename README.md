@@ -23,10 +23,10 @@ Les projets Epitech couvrent un large horizon de compétences. Beaucoup de proje
 La plupart des modules sont gardés, et de nouveaux font leur arrivée !
 
 ### SEC: CyberSécurité
-- **Description**: Epitech a des rooms spéciales chez TryHackMe qui permettent l'apprentissage sous forme de CTF (Mon module favori !).
+- **Description**: Epitech a des rooms spéciales chez TryHackMe qui permettent l'apprentissage sous forme de CTF.
 
 ### DOP: DevOps
-- **Description**: Module de DevOps (Docker pour le moment).
+- **Description**: Module de DevOps (Docker et Github Actions).
 
 ### ING: 
 - **Description**: Le nouveau module MUL, en plus complexe.
@@ -41,5 +41,5 @@ La plupart des modules sont gardés, et de nouveaux font leur arrivée !
 - **Librairies**: CSFML
 
 ## 📞 Contact
-Pour toute question, n'hésitez pas à me contacter à [leandre.fouret@proton.me](mailto:leandre.fouret@proton.me).
+Pour toute question, n'hésitez pas à [me contacter](mailto:leandre.fouret@proton.me).
 

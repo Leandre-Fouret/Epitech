@@ -1,0 +1,99 @@
+name: petit pain au chocolat
+on: [push, pull_request]
+
+env:
+  MIRROR_URL: "git@github.com:EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-leandre.fouret.git"
+  CURRENT_URL: "git@github.com:${{ github.repository }}.git"
+  EXECUTABLES: "petit_pain"
+
+jobs:
+  verify_conditions:
+    runs-on: ubuntu-latest
+    outputs:
+      conditions_ok: ${{ steps.verify.outputs.conditions_ok }}
+    steps:
+      - name: Verify branch and conditions
+        id: verify
+        run: |
+          if [[ "${{ github.ref }}" == ga-ignore* ]]; then
+            echo "::warning::Branch ${{ github.ref }} is ga-ignore*"
+            echo "conditions_ok=false" >> $GITHUB_OUTPUT
+          elif [[ "$MIRROR_URL" == "$CURRENT_URL" ]]; then
+            echo "::notice::Current repository is same as mirror"
+            echo "conditions_ok=false" >> $GITHUB_OUTPUT
+          else
+            echo "conditions_ok=true" >> $GITHUB_OUTPUT
+          fi
+
+  check_coding_style:
+    needs: [verify_conditions]
+    if: ${{ needs.verify_conditions.outputs.conditions_ok == 'true' }}
+    runs-on: ubuntu-latest
+    container: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Execute coding style checker
+        run: check.sh $(pwd) $(pwd)
+      - name: Look at errors
+        if: ${{ hashFiles('coding-style-reports.log') != '' }}
+        shell: bash
+        run: |
+          if [ ! -s coding-style-reports.log ]; then
+            echo "No coding style error."
+            exit 0
+          fi
+          while IFS= read -r line; do
+            file=$(echo "$line" | cut -d':' -f 1)
+            line_number=$(echo "$line" | cut -d':' -f 2)
+            error_message=$(echo "$line" | cut -d':' -f 3-)
+            echo "::error file=$file,line=$line_number::$error_message"
+          done < coding-style-reports.log
+          exit 84
+
+  check_program_compilation:
+    needs: [verify_conditions, check_coding_style]
+    if: ${{ needs.verify_conditions.outputs.conditions_ok == 'true' }}
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker
+    steps:
+      - uses: actions/checkout@v4
+      - name: run_make
+        timeout-minutes: 2
+        run: make
+      - name: clean_repo
+        run: make clean
+      - name: check_exec
+        if: ${{ env.EXECUTABLES != '' }}
+        run: |
+          if [ -f ${{ env.EXECUTABLES}} ]; then
+            echo "Compilation is successful"
+          else
+            echo "::error ::Compilation failed"
+            exit 84
+          fi
+
+  run_tests:
+    needs: [verify_conditions, check_program_compilation]
+    if: ${{ needs.verify_conditions.outputs.conditions_ok == 'true' }}
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker
+    steps:
+      - uses: actions/checkout@v4
+      - name: running tests
+        timeout-minutes: 2
+        run: make tests_run
+
+  push_to_mirror:
+    needs: [verify_conditions, run_tests]
+    if: ${{ needs.verify_conditions.outputs.conditions_ok == 'true' && github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ env.MIRROR_URL }}
+          ssh_private_key: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
